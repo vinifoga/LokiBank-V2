@@ -1,26 +1,62 @@
 import 'package:flutter/material.dart';
 import 'package:lokibankv2/components/app_bar_loki.dart';
+import 'package:lokibankv2/database/app_database.dart';
 import 'package:lokibankv2/models/contact.dart';
 import 'package:lokibankv2/screens/contact_form.dart';
 
 class ContactsList extends StatelessWidget {
-  final List<Contact> contacts = [];
 
   @override
   Widget build(BuildContext context) {
-    contacts.add(Contact('vini', 1999))
     return Scaffold(
       appBar: const AppBarLoki(
         appBarTitle: 'Contacts',
         mostraImagem: true,
       ),
-      body: ListView.builder(
-        itemBuilder: (context, index) {
-          final Contact contact = contacts[index];
-          return _ContactItem(contact);
-        },
-        itemCount: contacts.length,
-      ),
+      body: FutureBuilder<List<Contact>>(
+          future: findAll(),
+          initialData: [],
+          builder: (context, snapshot) {
+            switch(snapshot.connectionState){
+              case ConnectionState.none:
+                break;
+              case ConnectionState.waiting:
+                return Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: const [
+                      CircularProgressIndicator(color: Colors.amber,),
+                      Text('Loading')
+                    ],
+                  ),
+                );
+              case ConnectionState.active:
+                break;
+              case ConnectionState.done:
+                final List<Contact>? contacts = snapshot.data;
+                return ListView.builder(
+                  itemBuilder: (context, index) {
+                    final Contact contact = contacts![index];
+                    return _ContactItem(contact);
+                  },
+                  itemCount: contacts!.length,
+                );
+            }
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: const [
+                  Icon(
+                    Icons.error,
+                    color: Colors.red,
+                  ),
+                  Text('Unknown error')
+                ],
+              ),
+            );
+          }),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.of(context)
