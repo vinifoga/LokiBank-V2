@@ -5,7 +5,6 @@ import 'package:lokibankv2/models/contact.dart';
 import 'package:lokibankv2/screens/contact_form.dart';
 
 class ContactsList extends StatelessWidget {
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -17,7 +16,7 @@ class ContactsList extends StatelessWidget {
           future: findAll(),
           initialData: [],
           builder: (context, snapshot) {
-            switch(snapshot.connectionState){
+            switch (snapshot.connectionState) {
               case ConnectionState.none:
                 break;
               case ConnectionState.waiting:
@@ -26,7 +25,9 @@ class ContactsList extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: const [
-                      CircularProgressIndicator(color: Colors.amber,),
+                      CircularProgressIndicator(
+                        color: Colors.amber,
+                      ),
                       Text('Loading')
                     ],
                   ),
@@ -34,13 +35,14 @@ class ContactsList extends StatelessWidget {
               case ConnectionState.active:
                 break;
               case ConnectionState.done:
-                final List<Contact>? contacts = snapshot.data;
+                Contact contactTest = Contact('',122);
+                List<Contact>? contacts = snapshot.data;
                 return ListView.builder(
                   itemBuilder: (context, index) {
-                    final Contact contact = contacts![index];
+                    final Contact contact = contacts?[index] ?? contactTest;
                     return _ContactItem(contact);
                   },
-                  itemCount: contacts!.length,
+                  itemCount: contacts?.length ?? 0,
                 );
             }
             return Center(
@@ -59,9 +61,9 @@ class ContactsList extends StatelessWidget {
           }),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Navigator.of(context)
-              .push(MaterialPageRoute(builder: (context) => ContactForm()))
-              .then((newContact) => debugPrint(newContact.toString()));
+          Navigator.of(context).push(
+            MaterialPageRoute(builder: (context) => ContactForm()),
+          );
         },
         child: const Icon(
           Icons.add,

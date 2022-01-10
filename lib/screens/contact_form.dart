@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lokibankv2/components/app_bar_loki.dart';
+import 'package:lokibankv2/database/app_database.dart';
 import 'package:lokibankv2/models/contact.dart';
 
 class ContactForm extends StatefulWidget {
@@ -53,7 +54,7 @@ class _ContactFormState extends State<ContactForm> {
                     final String name = _nameController.text;
                     final int accountNumber = int.parse(_accountNumberController.text);
                     final Contact newContact = Contact(name, accountNumber);
-                    Navigator.pop(context, newContact);
+                    save(newContact).then((id) => Navigator.pop(context));
                   },
                   child: const Text('Confirmar', style: TextStyle(color: Colors.black),),
                   style: ElevatedButton.styleFrom(
