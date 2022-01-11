@@ -5,7 +5,7 @@ import 'http/webclient.dart';
 
 void main() {
   runApp(const Lokibankv2());
-  findAll();
+  findAll().then((transactions) => print('new transactions $transactions'));
 }
 
 class Lokibankv2 extends StatelessWidget {

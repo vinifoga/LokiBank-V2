@@ -1,8 +1,13 @@
+import 'dart:convert';
+
 import 'package:http/http.dart';
 import 'package:http_interceptor/http/http.dart';
 import 'package:http_interceptor/http/interceptor_contract.dart';
 import 'package:http_interceptor/models/request_data.dart';
 import 'package:http_interceptor/models/response_data.dart';
+import 'package:lokibankv2/models/contact.dart';
+import 'package:lokibankv2/models/transaction.dart';
+import 'package:lokibankv2/screens/transactions_list.dart';
 
 class LoggingInterceptor implements InterceptorContract {
   @override
@@ -24,7 +29,24 @@ class LoggingInterceptor implements InterceptorContract {
   }
 }
 
-void findAll() async{
-  final Client client = InterceptedClient.build(interceptors: [LoggingInterceptor()]);
-  final Response response = await client.get(Uri.parse('http://192.168.11.7:8080/transactions'));
+Future<List<Transaction>> findAll() async {
+  final Client client =
+      InterceptedClient.build(interceptors: [LoggingInterceptor()]);
+  final Response response =
+      await client.get(Uri.parse('http://192.168.11.7:8080/transactions'));
+  final List<dynamic> decodeJson = jsonDecode(response.body);
+
+  final List<Transaction> transactions = [];
+  for (Map<String, dynamic> transactionJson in decodeJson) {
+    final Map<String, dynamic> contactJson = transactionJson['contact'];
+    final Transaction transaction = Transaction(
+      transactionJson['value'],
+      Contact(
+        contactJson['name'],
+        contactJson['accountNumber'],
+      ),
+    );
+    transactions.add(transaction);
+  }
+  return transactions;
 }
