@@ -4,10 +4,10 @@ import 'package:lokibankv2/database/dao/contact_dao.dart';
 import 'package:lokibankv2/models/contact.dart';
 import 'package:lokibankv2/screens/contact_form.dart';
 
-class st extends StatelessWidget {
+class ContactsList extends StatelessWidget {
   final ContactDao _contactDao = ContactDao();
 
-  st({Key? key}) : super(key: key);
+  ContactsList({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

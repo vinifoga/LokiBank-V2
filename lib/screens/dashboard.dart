@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lokibankv2/components/app_bar_loki.dart';
 import 'package:lokibankv2/screens/contacts_list.dart';
+import 'package:lokibankv2/screens/transactions_list.dart';
 
 class Dashboard extends StatelessWidget {
   const Dashboard({Key? key}) : super(key: key);
@@ -35,9 +36,7 @@ class Dashboard extends StatelessWidget {
               _FeatureItem(
                 name: 'Transaction Feed',
                 icon: Icons.description,
-                onClick: () {
-
-                },
+                onClick: () => _showTransactionsList(context),
               ),
             ],
           ),
@@ -45,12 +44,20 @@ class Dashboard extends StatelessWidget {
       ),
     );
   }
+
+  _showTransactionsList(BuildContext context) {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => TransactionsList(),
+      ),
+    );
+  }
 }
 
-void _showContactsList(BuildContext context){
+void _showContactsList(BuildContext context) {
   Navigator.of(context).push(
     MaterialPageRoute(
-      builder: (context) => st(),
+      builder: (context) => ContactsList(),
     ),
   );
 }

@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:lokibankv2/screens/dashboard.dart';
 
-void main() => runApp(const Lokibankv2());
+import 'http/webclient.dart';
+
+void main() {
+  runApp(const Lokibankv2());
+  findAll();
+}
 
 class Lokibankv2 extends StatelessWidget {
   const Lokibankv2({Key? key}) : super(key: key);
