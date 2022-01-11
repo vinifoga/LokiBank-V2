@@ -38,6 +38,7 @@ dependencies:
   sqflite:
   path:
   http:
+  http_interceptor:
 
 dev_dependencies:
   flutter_test:
