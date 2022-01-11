@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lokibankv2/components/app_bar_loki.dart';
+import 'package:lokibankv2/components/progress.dart';
 import 'package:lokibankv2/database/dao/contact_dao.dart';
 import 'package:lokibankv2/models/contact.dart';
 import 'package:lokibankv2/screens/contact_form.dart';
@@ -24,18 +25,7 @@ class ContactsList extends StatelessWidget {
               case ConnectionState.none:
                 break;
               case ConnectionState.waiting:
-                return Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: const [
-                      CircularProgressIndicator(
-                        color: Colors.amber,
-                      ),
-                      Text('Loading')
-                    ],
-                  ),
-                );
+                return const Progress();
               case ConnectionState.active:
                 break;
               case ConnectionState.done:
