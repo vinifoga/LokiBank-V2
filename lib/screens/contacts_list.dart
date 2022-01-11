@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:lokibankv2/components/app_bar_loki.dart';
-import 'package:lokibankv2/database/app_database.dart';
+import 'package:lokibankv2/database/dao/contact_dao.dart';
 import 'package:lokibankv2/models/contact.dart';
 import 'package:lokibankv2/screens/contact_form.dart';
 
 class ContactsList extends StatelessWidget {
+  final ContactDao _contactDao = ContactDao();
+
+  ContactsList({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -13,8 +17,8 @@ class ContactsList extends StatelessWidget {
         mostraImagem: true,
       ),
       body: FutureBuilder<List<Contact>>(
-          future: findAll(),
-          initialData: [],
+          future: _contactDao.findAll(),
+          initialData: const [],
           builder: (context, snapshot) {
             switch (snapshot.connectionState) {
               case ConnectionState.none:
@@ -62,7 +66,7 @@ class ContactsList extends StatelessWidget {
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.of(context).push(
-            MaterialPageRoute(builder: (context) => ContactForm()),
+            MaterialPageRoute(builder: (context) => const ContactForm()),
           );
         },
         child: const Icon(
@@ -77,7 +81,7 @@ class ContactsList extends StatelessWidget {
 class _ContactItem extends StatelessWidget {
   final Contact contact;
 
-  _ContactItem(this.contact);
+  const _ContactItem(this.contact);
 
   @override
   Widget build(BuildContext context) {
@@ -85,11 +89,11 @@ class _ContactItem extends StatelessWidget {
       child: ListTile(
         title: Text(
           contact.name,
-          style: TextStyle(fontSize: 24.0),
+          style: const TextStyle(fontSize: 24.0),
         ),
         subtitle: Text(
           contact.accountNumber.toString(),
-          style: TextStyle(fontSize: 16.0),
+          style: const TextStyle(fontSize: 16.0),
         ),
       ),
     );

@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:lokibankv2/components/app_bar_loki.dart';
-import 'package:lokibankv2/database/app_database.dart';
+import 'package:lokibankv2/database/dao/contact_dao.dart';
 import 'package:lokibankv2/models/contact.dart';
 
 class ContactForm extends StatefulWidget {
 
 
-  ContactForm({Key? key}) : super(key: key);
+  const ContactForm({Key? key}) : super(key: key);
 
   @override
   State<ContactForm> createState() => _ContactFormState();
@@ -15,6 +15,7 @@ class ContactForm extends StatefulWidget {
 class _ContactFormState extends State<ContactForm> {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _accountNumberController = TextEditingController();
+  final ContactDao _contactDao = ContactDao();
 
   @override
   Widget build(BuildContext context) {
@@ -54,7 +55,7 @@ class _ContactFormState extends State<ContactForm> {
                     final String name = _nameController.text;
                     final int accountNumber = int.parse(_accountNumberController.text);
                     final Contact newContact = Contact(name, accountNumber);
-                    save(newContact).then((id) => Navigator.pop(context));
+                    _contactDao.save(newContact).then((id) => Navigator.pop(context));
                   },
                   child: const Text('Confirmar', style: TextStyle(color: Colors.black),),
                   style: ElevatedButton.styleFrom(
