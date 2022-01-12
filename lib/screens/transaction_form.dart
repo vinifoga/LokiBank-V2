@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lokibankv2/components/app_bar_loki.dart';
-import 'package:lokibankv2/http/webclient.dart';
+import 'package:lokibankv2/http/webclients/transaction_webclient.dart';
 import 'package:lokibankv2/models/contact.dart';
 import 'package:lokibankv2/models/transaction.dart';
 
@@ -15,6 +15,7 @@ class TransactionForm extends StatefulWidget {
 
 class _TransactionFormState extends State<TransactionForm> {
   final TextEditingController _valueController = TextEditingController();
+  final TransactionWebClient _webClient = TransactionWebClient();
 
   @override
   Widget build(BuildContext context) {
@@ -61,7 +62,7 @@ class _TransactionFormState extends State<TransactionForm> {
                   child: Text('Transfer'), onPressed: () {
                     final double? value = double.tryParse(_valueController.text);
                     final transactionCreated = Transaction(value!, widget.contact);
-                    save(transactionCreated).then((transaction) => Navigator.pop(context));
+                    _webClient.save(transactionCreated).then((transaction) => Navigator.pop(context));
                 },
                 ),
               ),)
