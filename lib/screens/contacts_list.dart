@@ -4,6 +4,7 @@ import 'package:lokibankv2/components/progress.dart';
 import 'package:lokibankv2/database/dao/contact_dao.dart';
 import 'package:lokibankv2/models/contact.dart';
 import 'package:lokibankv2/screens/contact_form.dart';
+import 'package:lokibankv2/screens/transaction_form.dart';
 
 class ContactsList extends StatelessWidget {
   final ContactDao _contactDao = ContactDao();
@@ -29,12 +30,18 @@ class ContactsList extends StatelessWidget {
               case ConnectionState.active:
                 break;
               case ConnectionState.done:
-                Contact contactTest = Contact('',122);
                 List<Contact>? contacts = snapshot.data;
                 return ListView.builder(
                   itemBuilder: (context, index) {
-                    final Contact contact = contacts?[index] ?? contactTest;
-                    return _ContactItem(contact);
+                    final Contact contact = contacts![index];
+                    return _ContactItem(contact: contact, onClick : () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              TransactionForm(contact: contact),
+                        ),
+                      );
+                    });
                   },
                   itemCount: contacts?.length ?? 0,
                 );
@@ -70,13 +77,15 @@ class ContactsList extends StatelessWidget {
 
 class _ContactItem extends StatelessWidget {
   final Contact contact;
+  final Function onClick;
 
-  const _ContactItem(this.contact);
+  const _ContactItem({required this.contact, required this.onClick});
 
   @override
   Widget build(BuildContext context) {
     return Card(
       child: ListTile(
+        onTap: () => onClick(),
         title: Text(
           contact.name,
           style: const TextStyle(fontSize: 24.0),
