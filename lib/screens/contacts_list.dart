@@ -6,10 +6,16 @@ import 'package:lokibankv2/models/contact.dart';
 import 'package:lokibankv2/screens/contact_form.dart';
 import 'package:lokibankv2/screens/transaction_form.dart';
 
-class ContactsList extends StatelessWidget {
-  final ContactDao _contactDao = ContactDao();
+class ContactsList extends StatefulWidget {
 
-  ContactsList({Key? key}) : super(key: key);
+  const ContactsList({Key? key}) : super(key: key);
+
+  @override
+  State<ContactsList> createState() => _ContactsListState();
+}
+
+class _ContactsListState extends State<ContactsList> {
+  final ContactDao _contactDao = ContactDao();
 
   @override
   Widget build(BuildContext context) {
@@ -64,7 +70,7 @@ class ContactsList extends StatelessWidget {
         onPressed: () {
           Navigator.of(context).push(
             MaterialPageRoute(builder: (context) => const ContactForm()),
-          );
+          ).then((value) => setState((){}));
         },
         child: const Icon(
           Icons.add,

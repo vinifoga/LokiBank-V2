@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lokibankv2/components/app_bar_loki.dart';
+import 'package:lokibankv2/components/transaction_auth_dialog.dart';
 import 'package:lokibankv2/http/webclients/transaction_webclient.dart';
 import 'package:lokibankv2/models/contact.dart';
 import 'package:lokibankv2/models/transaction.dart';
@@ -55,21 +56,39 @@ class _TransactionFormState extends State<TransactionForm> {
                   keyboardType: TextInputType.numberWithOptions(decimal: true),
                 ),
               ),
-              Padding(padding: const EdgeInsets.only(top: 16.0),
-              child: SizedBox(
-                width: double.maxFinite,
-                child: ElevatedButton(
-                  child: Text('Transfer'), onPressed: () {
-                    final double? value = double.tryParse(_valueController.text);
-                    final transactionCreated = Transaction(value!, widget.contact);
-                    _webClient.save(transactionCreated).then((transaction) => Navigator.pop(context));
-                },
+              Padding(
+                padding: const EdgeInsets.only(top: 16.0),
+                child: SizedBox(
+                  width: double.maxFinite,
+                  child: ElevatedButton(
+                    child: Text('Transfer'),
+                    onPressed: () {
+                      final double? value =
+                          double.tryParse(_valueController.text);
+                      final transactionCreated =
+                          Transaction(value!, widget.contact);
+                      showDialog(
+                        context: context,
+                        builder: (contextDialog) => TransactionAuthDialog(
+                          onConfirm: (String password) {
+                            _save(transactionCreated, password, context);
+                          },
+                        ),
+                      );
+                    },
+                  ),
                 ),
-              ),)
+              )
             ],
           ),
         ),
       ),
     );
+  }
+
+  void _save(Transaction transactionCreated, String password, BuildContext context) {
+      _webClient
+        .save(transactionCreated, password)
+        .then((transaction) => Navigator.pop(context));
   }
 }
