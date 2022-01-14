@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lokibankv2/components/app_bar_loki.dart';
+import 'package:lokibankv2/components/response_dialog.dart';
 import 'package:lokibankv2/components/transaction_auth_dialog.dart';
 import 'package:lokibankv2/http/webclients/transaction_webclient.dart';
 import 'package:lokibankv2/models/contact.dart';
@@ -86,9 +87,24 @@ class _TransactionFormState extends State<TransactionForm> {
     );
   }
 
-  void _save(Transaction transactionCreated, String password, BuildContext context) {
-      _webClient
-        .save(transactionCreated, password)
-        .then((transaction) => Navigator.pop(context));
+  void _save(
+      Transaction transactionCreated, String password, BuildContext context) {
+    _webClient.save(transactionCreated, password).then((transaction) {
+      showDialog(
+          context: context,
+          builder: (contextDialog) {
+            return const SuccessDialog(message: 'Successful Transaction');
+          }).then(
+        (value) => Navigator.pop(context),
+      );
+    }).catchError((e) {
+      showDialog(
+          context: context,
+          builder: (contextDialog) {
+            return FailureDialog(
+              message: e.message,
+            );
+          });
+    }, test: (e) => e is Exception);
   }
 }
